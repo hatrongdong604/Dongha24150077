@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import introImage from "./assets/image/intro.jpg"; // <-- đường dẫn đúng theo tree của bạn
-import Login from "./login"; // hoặc "./Login" nếu file đặt tên là Login.tsx (phải chính xác)
+import introImage from "./assets/images/newicon_en.gif";
+import Login from "./login";
 
 export default function App() {
   const [showIntro, setShowIntro] = useState(true);
@@ -15,11 +15,7 @@ export default function App() {
       {showIntro ? (
         <div className="intro-container">
           <img src={introImage} alt="intro" className="intro-bg" />
-
-          {/* Logo hiện dần giống Genshin */}
           <div className="logo fade-in">YOUR LOGO</div>
-
-          {/* Hiệu ứng ánh sáng chạy ngang giống website Genshin */}
           <div className="light-effect"></div>
         </div>
       ) : (

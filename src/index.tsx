@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import "./index.css"; // Nếu không dùng CSS thì xoá dòng này cũng được
+import "./index.css";
+// Nếu không dùng CSS thì xoá dòng này cũng được
 
 const rootElement = document.getElementById("root");
 

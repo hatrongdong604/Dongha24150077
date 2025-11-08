@@ -1,0 +1,53 @@
+/* login page tổng thể */
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #1a1a1a; /* màu nền tối */
+    color: white;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* khung đăng nhập */
+  .login-container {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+  }
+  
+  /* input */
+  .login-container input {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+  }
+  
+  /* nút đăng nhập */
+  .login-container button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f0c040;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+  }
+  
+  .login-container button:hover {
+    background-color: #d9a520;
+  }
+  
+  /* link đăng ký */
+  .login-container a {
+    color: #f0c040;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  

@@ -1,43 +1,27 @@
+// src/Layout/Layout.tsx
 import React from "react";
+import { Navbar } from "../components/Navbar";
+import { Outlet } from "react-router-dom";
 import "../assets/css/Layout.css";
 
-interface LayoutProps {
-  children?: React.ReactNode;
-  heroVideoUrl?: string; // URL video nền cho Hero
-}
+// Import video trực tiếp
+import heroVideo from "../assets/videos/hero.mp4";
 
-const Layout: React.FC<LayoutProps> = ({ children, heroVideoUrl }) => {
+const Layout: React.FC = () => {
   return (
     <div className="layout">
-      {/* Navbar */}
-      <nav className="navbar">
-        <div className="logo-container">
-          <img
-            src="https://i.pinimg.com/736x/b6/13/f9/b613f96d539eb174ffbc1fdb130be012.jpg"
-            alt="Logo"
-            className="logo"
-          />
-          <span className="logo-text">Đạo quán Hoyoverse</span>
-        </div>
-        <ul className="menu">
-          <li>Home</li>
-          <li>Characters</li>
-          <li>Download</li>
-          <li>News</li>
-        </ul>
-      </nav>
+      <Navbar />
 
-      {/* Hero Section */}
+      {/* Hero Section với video nền */}
       <section className="hero-section">
-        {heroVideoUrl && (
-          <video
-            autoPlay
-            loop
-            muted
-            className="hero-video"
-            src={heroVideoUrl}
-          ></video>
-        )}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="hero-video"
+          src={heroVideo}
+        />
         <div className="hero-overlay">
           <h1>Welcome to Đạo quán Hoyoverse</h1>
           <p>Khám phá thế giới tuyệt vời như Genshin Impact</p>
@@ -45,12 +29,12 @@ const Layout: React.FC<LayoutProps> = ({ children, heroVideoUrl }) => {
       </section>
 
       {/* Main content */}
-      {children && <main className="main-content">{children}</main>}
+      <main className="main-content">
+        <Outlet /> {/* Nội dung các route sẽ render ở đây */}
+      </main>
 
       {/* Footer */}
-      <footer className="footer">
-        &copy; 2025 Đạo quán Hoyoverse. All rights reserved.
-      </footer>
+      <footer className="footer">&copy; 2025 Đạo quán Hoyoverse</footer>
     </div>
   );
 };

@@ -1,27 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./Layout/Layout";
 import MainPage from "./pages/MainPages";
 import LoginPage from "./pages/LoginPages";
 
 export default function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-
   return (
     <Router>
       <Routes>
-        {/* Trang chính */}
-        <Route path="/" element={<MainPage />} />
-
-        {/* Trang login */}
-        <Route
-          path="/login"
-          element={
-            <LoginPage
-              introVideoUrl="URL_video_intro.mp4" // tùy chọn video intro
-              onLoginSuccess={() => setLoggedIn(true)}
-            />
-          }
-        />
+        {/* Không truyền heroVideoUrl nữa */}
+        <Route path="/" element={<Layout />}>
+          <Route index element={<MainPage />} />
+          <Route
+            path="login"
+            element={<LoginPage onLoginSuccess={() => {}} />}
+          />
+        </Route>
       </Routes>
     </Router>
   );

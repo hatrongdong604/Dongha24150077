@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../assets/css/LoginPages.css";
+import { loginUser, registerUser } from "../supabase/authClient";
 
 interface LoginPageProps {
   onLoginSuccess: () => void;

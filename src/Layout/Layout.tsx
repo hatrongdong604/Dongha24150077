@@ -4,7 +4,7 @@ import { Navbar } from "../components/Navbar";
 import { Outlet } from "react-router-dom";
 import "../assets/css/Layout.css";
 
-// Import video trực tiếp
+// import video trực tiếp
 import heroVideo from "../assets/videos/hero.mp4";
 
 const Layout: React.FC = () => {
@@ -12,7 +12,7 @@ const Layout: React.FC = () => {
     <div className="layout">
       <Navbar />
 
-      {/* Hero Section với video nền */}
+      {/* Hero Section với video nền trực tiếp */}
       <section className="hero-section">
         <video
           autoPlay
@@ -30,7 +30,7 @@ const Layout: React.FC = () => {
 
       {/* Main content */}
       <main className="main-content">
-        <Outlet /> {/* Nội dung các route sẽ render ở đây */}
+        <Outlet />
       </main>
 
       {/* Footer */}

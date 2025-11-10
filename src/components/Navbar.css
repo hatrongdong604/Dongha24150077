@@ -1,23 +1,26 @@
 /* ===== Đạo quán Hoyoverse Navbar (Dark Pink Theme) ===== */
-
-.Navbar {
+.navbar {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(10, 10, 10, 0.95); /* đen đậm, hơi mờ nhẹ */
-  padding: 14px 40px;
+  background: rgba(10, 10, 10, 0.95);
+  padding: 14px 20px;
+  box-sizing: border-box;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
   position: sticky;
   top: 0;
   z-index: 1000;
+  flex-wrap: wrap;
 }
 
+/* ===== Logo ===== */
 .logo-container {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .logo {
@@ -39,13 +42,29 @@
 .menu {
   list-style: none;
   display: flex;
-  gap: 36px;
+  gap: 24px;
   margin: 0;
   padding: 0;
   align-items: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
 }
 
-.menu li a {
+.menu li {
+  flex-shrink: 0;
+}
+
+/* Ẩn scrollbar nhưng vẫn scroll được */
+.menu::-webkit-scrollbar {
+  display: none;
+}
+.menu {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.menu li a,
+.menu li button {
   color: #f2f2f2;
   text-decoration: none;
   font-size: 1.05rem;
@@ -54,10 +73,14 @@
   transition: all 0.25s ease;
   position: relative;
   padding: 5px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-.menu li a:hover {
-  color: #ff99cc;
+.menu li a:hover,
+.menu li button:hover {
+  color: #ff99cc; /* hồng nhấn */
   text-shadow: 0 0 8px rgba(255, 153, 204, 0.8);
 }
 
@@ -94,18 +117,97 @@
   transform: translateY(-2px);
 }
 
-/* ===== Liên kết ngoài ===== */
-.official-link {
-  font-weight: 500;
-  color: #ffb3e6;
+/* ===== User Avatar ===== */
+.user-menu-container {
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: 20px; /* cách menu ra */
+  z-index: 1100;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ff66b2;
+  transition: transform 0.25s ease;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+}
+
+/* Dropdown User */
+.user-dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: #1a001a;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(255, 102, 178, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 180px;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Khi dropdown mở */
+.user-menu-container.active .user-dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.user-dropdown p {
+  color: #fff;
+  margin: 0;
+  font-weight: 600;
+}
+
+.logout-button,
+.back-home {
   padding: 6px 10px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, #330011, #ff3399);
+  color: #fff;
+  border: none;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.official-link:hover {
-  background: rgba(255, 153, 204, 0.15);
-  text-shadow: 0 0 8px rgba(255, 153, 204, 0.8);
+.logout-button:hover,
+.back-home:hover {
+  background: linear-gradient(135deg, #660033, #ff66b2);
+  transform: translateY(-1px);
+}
+
+/* ===== Cart Link ===== */
+.cart-link {
+  font-weight: bold;
   color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #330011, #ff3399);
+  transition: all 0.3s ease;
+}
+
+.cart-link:hover {
+  background: linear-gradient(135deg, #660033, #ff66b2);
+  transform: translateY(-1px);
+}
+
+/* ===== Padding main content tránh che navbar ===== */
+.main-content,
+.char-content,
+.homepage-content {
+  padding-top: 80px;
 }

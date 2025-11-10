@@ -1,3 +1,4 @@
+// src/pages/LoginPages.tsx
 import React, { useState, useEffect } from "react";
 import "../assets/css/LoginPages.css";
 import { loginUser, registerUser } from "../supabase/authClient";
@@ -13,6 +14,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
 }) => {
   const [showIntro, setShowIntro] = useState(!!introVideoUrl);
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(""); // ✨ Thêm username
   const [password, setPassword] = useState("");
   const [isRegister, setIsRegister] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,36 +28,40 @@ const LoginPage: React.FC<LoginPageProps> = ({
     }
   }, [introVideoUrl]);
 
-  // Nếu đang hiển thị intro thì chỉ render video
   if (showIntro && introVideoUrl) {
     return (
       <div className="intro-container">
-        <video
-          autoPlay
-          muted
-          className="intro-video"
-          src={introVideoUrl}
-        ></video>
+        <video autoPlay muted className="intro-video" src={introVideoUrl}></video>
       </div>
     );
   }
 
-  // Xử lý đăng nhập hoặc đăng ký
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
     try {
-      const action = isRegister ? registerUser : loginUser;
-      const { data, error } = await action(email, password);
+      if (isRegister) {
+        // 🔹 Đăng ký với username bắt buộc
+        if (!username.trim()) {
+          setMessage("❌ Vui lòng nhập tên hiển thị");
+          setLoading(false);
+          return;
+        }
+        const { data, error } = await registerUser(email, password, username);
 
-      if (error) {
-        setMessage(`❌ ${error.message}`);
-      } else {
-        if (isRegister) {
-          setMessage("✅ Đăng ký thành công! Hãy đăng nhập lại.");
+        if (error) {
+          setMessage(`❌ ${error.message}`);
+        } else {
+          setMessage("✅ Đăng ký thành công! Hãy đăng nhập.");
           setIsRegister(false);
+        }
+      } else {
+        // 🔹 Login
+        const { data, error } = await loginUser(email, password);
+        if (error) {
+          setMessage(`❌ ${error.message}`);
         } else {
           setMessage("✅ Đăng nhập thành công!");
           onLoginSuccess();
@@ -82,6 +88,17 @@ const LoginPage: React.FC<LoginPageProps> = ({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+
+          {isRegister && (
+            <input
+              type="text"
+              placeholder="Tên hiển thị"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          )}
+
           <input
             type="password"
             placeholder="Mật khẩu"
@@ -89,6 +106,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+
           <button type="submit" disabled={loading}>
             {loading
               ? "⏳ Đang xử lý..."

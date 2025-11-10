@@ -3,37 +3,30 @@ import React from "react";
 import { Navbar } from "../components/Navbar";
 import { Outlet } from "react-router-dom";
 import "../assets/css/Layout.css";
-
-// Import video trực tiếp
 import heroVideo from "../assets/videos/hero.mp4";
 
-const Layout: React.FC = () => {
+interface LayoutProps {
+  isLoggedIn: boolean;
+  onLogout: () => void;
+}
+
+const Layout: React.FC<LayoutProps> = ({ isLoggedIn, onLogout }) => {
   return (
     <div className="layout">
-      <Navbar />
+      <Navbar isLoggedIn={isLoggedIn} onLogout={onLogout} />
 
-      {/* Hero Section với video nền */}
       <section className="hero-section">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="hero-video"
-          src={heroVideo}
-        />
+        <video autoPlay loop muted playsInline className="hero-video" src={heroVideo} />
         <div className="hero-overlay">
           <h1>Welcome to Đạo quán Hoyoverse</h1>
           <p>Khám phá thế giới tuyệt vời như Genshin Impact</p>
         </div>
       </section>
 
-      {/* Main content */}
       <main className="main-content">
-        <Outlet /> {/* Nội dung các route sẽ render ở đây */}
+        <Outlet />
       </main>
 
-      {/* Footer */}
       <footer className="footer">&copy; 2025 Đạo quán Hoyoverse</footer>
     </div>
   );

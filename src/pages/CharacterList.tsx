@@ -3,7 +3,7 @@ import { SearchBar } from "../components/SearchBar";
 import { CharacterCard } from "../components/CharacterCard";
 import { CharacterModal } from "../components/CharacterModal";
 import { useCart } from "../contexts/CartContext";
-import { supabase } from "./supabaseClient"; // nếu file của bạn khác, sửa path
+import { supabase } from "../supabaseClient"; // nếu file của bạn khác, sửa path
 import "../assets/css/character-list.css";
 import { useNavigate } from "react-router-dom";
 

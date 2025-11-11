@@ -20,6 +20,7 @@ export const CharacterCard: React.FC<Props> = ({
 }) => {
   return (
     <div
+      className="char-card"
       style={{
         cursor: "pointer",
         borderRadius: 12,
@@ -33,7 +34,6 @@ export const CharacterCard: React.FC<Props> = ({
       }}
       onClick={onOpen}
     >
-      {/* Hình nhân vật */}
       {image && (
         <div
           style={{
@@ -55,15 +55,7 @@ export const CharacterCard: React.FC<Props> = ({
         </div>
       )}
 
-      {/* Thông tin */}
-      <div
-        style={{
-          padding: 12,
-          display: "flex",
-          flexDirection: "column",
-          gap: 6,
-        }}
-      >
+      <div style={{ padding: 12, display: "flex", flexDirection: "column", gap: 6 }}>
         <h4 style={{ margin: 0, color: "#f0c040" }}>{title}</h4>
 
         {description && (
@@ -88,9 +80,7 @@ export const CharacterCard: React.FC<Props> = ({
             alignItems: "center",
           }}
         >
-          <strong style={{ color: "#f0c040" }}>
-            {price.toLocaleString()} VND
-          </strong>
+          <strong style={{ color: "#f0c040" }}>{price.toLocaleString()} VND</strong>
 
           <button
             style={{
@@ -102,7 +92,7 @@ export const CharacterCard: React.FC<Props> = ({
               fontWeight: 600,
             }}
             onClick={(e) => {
-              e.stopPropagation(); // tránh click trùng div cha
+              e.stopPropagation();
               onOpen();
             }}
           >

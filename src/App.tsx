@@ -1,6 +1,6 @@
 // src/App.tsx
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./Layout/Layout";
 import CharacterList from "./pages/CharacterList";
 import CartPage from "./pages/CartPage";
@@ -10,18 +10,15 @@ import { CartProvider } from "./contexts/CartContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
-  // Quản lý trạng thái login
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
     !!localStorage.getItem("user")
   );
 
-  // Hàm gọi khi login thành công
   const handleLoginSuccess = () => {
-    localStorage.setItem("user", "true"); // lưu thông tin user
+    localStorage.setItem("user", "true");
     setIsLoggedIn(true);
   };
 
-  // Hàm logout
   const handleLogout = () => {
     localStorage.removeItem("user");
     setIsLoggedIn(false);
@@ -31,15 +28,11 @@ export default function App() {
     <CartProvider>
       <Router>
         <Routes>
-          {/* Layout chung cho tất cả các route */}
           <Route
             path="/"
             element={<Layout onLogout={handleLogout} isLoggedIn={isLoggedIn} />}
           >
-            {/* Trang chính */}
             <Route index element={<MainPage />} />
-
-            {/* Buôn nhân vật */}
             <Route
               path="buon-hang"
               element={
@@ -48,8 +41,6 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
-
-            {/* Giỏ hàng */}
             <Route
               path="cart"
               element={
@@ -58,12 +49,13 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
-
-            {/* Trang login */}
             <Route
               path="login"
-              element={<LoginPages onLoginSuccess={handleLoginSuccess} />}
+              element={
+                isLoggedIn ? <Navigate to="/" replace /> : <LoginPages onLoginSuccess={handleLoginSuccess} />
+              }
             />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
       </Router>

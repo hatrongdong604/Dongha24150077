@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+// src/components/Navbar.tsx
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
 import { getUserProfile, logoutUser } from "../supabase/authClient";
 import "./Navbar.css";
@@ -12,47 +13,62 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => {
   const { items } = useCart();
   const cartCount = items.reduce((sum, item) => sum + item.qty, 0);
-  const navigate = useNavigate();
 
   const [profile, setProfile] = useState<{
     username: string;
+    email: string;
     avatar_url?: string;
   } | null>(null);
 
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLLIElement>(null);
+
+  // Lấy profile từ Supabase khi login
   useEffect(() => {
     if (isLoggedIn) {
       (async () => {
         const data = await getUserProfile();
-        if (data)
-          setProfile({ username: data.username, avatar_url: data.avatar_url });
+        if (data) {
+          setProfile({
+            username: data.username,
+            email: data.email,
+            avatar_url: data.avatar_url,
+          });
+        }
       })();
     } else {
       setProfile(null);
+      setShowDropdown(false);
     }
   }, [isLoggedIn]);
+
+  // Click ngoài dropdown sẽ tự đóng
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleLogout = async () => {
     await logoutUser();
     onLogout();
-    navigate("/"); // quay về trang chủ
-  };
-
-  const handleHomeClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    navigate("/");
+    setShowDropdown(false);
   };
 
   return (
     <nav className="navbar">
-      {/* Logo luôn hiển thị bên trái */}
-      <div
-        className="logo-container"
-        onClick={() => navigate("/")}
-        style={{ cursor: "pointer" }}
-      >
+      {/* Logo luôn hiển thị */}
+      <div className="logo-container">
         <img
           src="https://i.pinimg.com/736x/b6/13/f9/b613f96d539eb174ffbc1fdb130be012.jpg"
-          alt="Logo Đạo quán Hoyoverse"
+          alt="Logo"
           className="logo"
         />
         <span className="logo-text">Đạo quán Hoyoverse</span>
@@ -61,9 +77,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => {
       {/* Menu */}
       <ul className="menu">
         <li>
-          <a href="/" onClick={handleHomeClick}>
-            Trang chủ
-          </a>
+          <Link to="/">Trang chủ</Link>
         </li>
         <li>
           <Link to="/buon-hang">Buôn nhân vật</Link>
@@ -74,7 +88,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Cộng đồng
+            Cộng Đồng
           </a>
         </li>
         <li>
@@ -87,24 +101,34 @@ export const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => {
           </a>
         </li>
         <li>
-          <Link to="/cart" className="cart-link">
-            Giỏ hàng ({cartCount})
-          </Link>
+          <Link to="/cart">Giỏ hàng ({cartCount})</Link>
         </li>
 
-        {/* Góc phải: Logout + Avatar hoặc Login */}
-        <li className="user-menu-container" style={{ marginLeft: "20px" }}>
+        {/* User / Login */}
+        <li className="user-menu-container" ref={dropdownRef}>
           {isLoggedIn ? (
-            <div className="user-section">
-              <button className="logout-button" onClick={handleLogout}>
-                Logout
-              </button>
+            <>
+              {/* Avatar */}
               <img
                 src={profile?.avatar_url || "https://i.pravatar.cc/40"}
                 alt="User avatar"
                 className="user-avatar"
+                onClick={() => setShowDropdown(!showDropdown)}
               />
-            </div>
+
+              {/* Dropdown profile */}
+              {showDropdown && (
+                <div className="user-dropdown">
+                  <p>
+                    <strong>{profile?.username}</strong>
+                  </p>
+                  <p>{profile?.email}</p>
+                  <button className="logout-button" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
             <Link to="/login" className="login-link">
               Login

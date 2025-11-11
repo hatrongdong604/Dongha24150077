@@ -121,11 +121,12 @@
   transform: translateY(-2px);
 }
 
-/* ===== User section (Logout + Avatar) ===== */
+/* ===== User Section (Logout + Avatar) ===== */
 .user-section {
   display: flex;
   align-items: center; /* căn thẳng hàng với menu */
   gap: 12px; /* khoảng cách giữa Logout và Avatar */
+  position: relative;
 }
 
 .logout-button {
@@ -139,7 +140,7 @@
   text-decoration: none;
   display: flex;
   align-items: center;
-  height: 36px; /* bằng avatar hoặc gần bằng menu */
+  height: 36px;
   transition: all 0.3s ease;
 }
 
@@ -157,6 +158,7 @@
   object-fit: cover;
   border: 2px solid #ff66b2;
   transition: transform 0.25s ease;
+  cursor: pointer;
 }
 
 .user-avatar:hover {
@@ -166,7 +168,7 @@
 /* Dropdown User */
 .user-dropdown {
   position: absolute;
-  top: 48px;
+  top: 44px; /* chỉnh vừa với avatar */
   right: 0;
   background: #1a001a;
   padding: 12px;
@@ -175,26 +177,20 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  min-width: 180px;
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-/* Khi dropdown mở */
-.user-menu-container.active .user-dropdown {
+  min-width: 200px;
   opacity: 1;
-  transform: translateY(0);
   pointer-events: auto;
+  z-index: 1100;
 }
 
+/* Text inside dropdown */
 .user-dropdown p {
   color: #fff;
   margin: 0;
   font-weight: 600;
 }
 
+/* ===== Back home (optional button) ===== */
 .back-home {
   padding: 6px 10px;
   border-radius: 6px;

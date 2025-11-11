@@ -11,7 +11,6 @@ interface Props {
 }
 
 export const CharacterCard: React.FC<Props> = ({
-  id,
   title,
   price,
   image,
@@ -21,6 +20,7 @@ export const CharacterCard: React.FC<Props> = ({
   return (
     <div
       className="char-card"
+      onClick={onOpen}
       style={{
         cursor: "pointer",
         borderRadius: 12,
@@ -29,7 +29,6 @@ export const CharacterCard: React.FC<Props> = ({
         border: "1px solid rgba(255,255,255,0.06)",
         transition: "transform 0.15s, box-shadow 0.15s",
       }}
-      onClick={onOpen} // click toàn bộ card cũng mở modal
     >
       {/* Hình nhân vật */}
       <div
@@ -68,16 +67,16 @@ export const CharacterCard: React.FC<Props> = ({
             {description}
           </p>
         )}
+
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            color: "#f0c040",
           }}
         >
-          <strong style={{ color: "#f0c040" }}>
-            {price.toLocaleString()} VND
-          </strong>
+          <strong>{price.toLocaleString()} VND</strong>
           <button
             style={{
               padding: "6px 10px",

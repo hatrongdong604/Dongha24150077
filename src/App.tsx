@@ -1,32 +1,27 @@
 // src/App.tsx
 import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./Layout/Layout";
 import CharacterList from "./pages/CharacterList";
 import CartPage from "./pages/CartPage";
 import MainPage from "./pages/MainPages";
 import LoginPages from "./pages/LoginPages";
 import { CartProvider } from "./contexts/CartContext";
-
-// Import ProtectedRoute
-import ProtectedRoute from "./components/ProtectedRoute"; // hoặc ./routes/ProtectedRoute nếu bạn đặt trong routes/
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
+  // Quản lý trạng thái login
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
     !!localStorage.getItem("user")
   );
 
+  // Hàm gọi khi login thành công
   const handleLoginSuccess = () => {
-    localStorage.setItem("user", "true");
+    localStorage.setItem("user", "true"); // lưu thông tin user
     setIsLoggedIn(true);
   };
 
+  // Hàm logout
   const handleLogout = () => {
     localStorage.removeItem("user");
     setIsLoggedIn(false);
@@ -36,7 +31,7 @@ export default function App() {
     <CartProvider>
       <Router>
         <Routes>
-          {/* Layout chung */}
+          {/* Layout chung cho tất cả các route */}
           <Route
             path="/"
             element={<Layout onLogout={handleLogout} isLoggedIn={isLoggedIn} />}
@@ -44,7 +39,7 @@ export default function App() {
             {/* Trang chính */}
             <Route index element={<MainPage />} />
 
-            {/* Buôn nhân vật (Protected) */}
+            {/* Buôn nhân vật */}
             <Route
               path="buon-hang"
               element={
@@ -54,7 +49,7 @@ export default function App() {
               }
             />
 
-            {/* Giỏ hàng (Protected) */}
+            {/* Giỏ hàng */}
             <Route
               path="cart"
               element={
@@ -67,17 +62,8 @@ export default function App() {
             {/* Trang login */}
             <Route
               path="login"
-              element={
-                isLoggedIn ? (
-                  <Navigate to="/" replace />
-                ) : (
-                  <LoginPages onLoginSuccess={handleLoginSuccess} />
-                )
-              }
+              element={<LoginPages onLoginSuccess={handleLoginSuccess} />}
             />
-
-            {/* Redirect các đường dẫn không hợp lệ về trang chính */}
-            <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
       </Router>

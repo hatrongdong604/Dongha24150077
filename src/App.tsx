@@ -9,24 +9,24 @@ import {
 
 import Layout from "./Layout/Layout";
 import CharacterList from "./pages/CharacterList";
-import CartPage from "./pages/CartPage"; // Đảm bảo đúng tên file
+import CartPage from "./pages/CartPage";
 import MainPage from "./pages/MainPages";
 import LoginPages from "./pages/LoginPages";
 import { CartProvider } from "./contexts/CartContext";
 
+// Import ProtectedRoute
+import ProtectedRoute from "./components/ProtectedRoute"; // hoặc ./routes/ProtectedRoute nếu bạn đặt trong routes/
+
 export default function App() {
-  // Quản lý trạng thái login
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
     !!localStorage.getItem("user")
   );
 
-  // Hàm gọi khi login thành công
   const handleLoginSuccess = () => {
-    localStorage.setItem("user", "true"); // Hoặc lưu thông tin user
+    localStorage.setItem("user", "true");
     setIsLoggedIn(true);
   };
 
-  // Hàm logout
   const handleLogout = () => {
     localStorage.removeItem("user");
     setIsLoggedIn(false);
@@ -36,16 +36,33 @@ export default function App() {
     <CartProvider>
       <Router>
         <Routes>
-          {/* Layout chung cho tất cả các route */}
-          <Route path="/" element={<Layout onLogout={handleLogout} isLoggedIn={isLoggedIn} />}>
+          {/* Layout chung */}
+          <Route
+            path="/"
+            element={<Layout onLogout={handleLogout} isLoggedIn={isLoggedIn} />}
+          >
             {/* Trang chính */}
             <Route index element={<MainPage />} />
 
-            {/* Buôn nhân vật */}
-            <Route path="buon-hang" element={<CharacterList />} />
+            {/* Buôn nhân vật (Protected) */}
+            <Route
+              path="buon-hang"
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <CharacterList />
+                </ProtectedRoute>
+              }
+            />
 
-            {/* Giỏ hàng */}
-            <Route path="cart" element={<CartPage />} />
+            {/* Giỏ hàng (Protected) */}
+            <Route
+              path="cart"
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <CartPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Trang login */}
             <Route

@@ -1,9 +1,10 @@
+// src/pages/CharacterList.tsx
 import React, { useEffect, useMemo, useState } from "react";
 import { SearchBar } from "../components/SearchBar";
 import { CharacterCard } from "../components/CharacterCard";
 import { CharacterModal } from "../components/CharacterModal";
 import { useCart } from "../contexts/CartContext";
-import { supabase } from "../supabaseClient"; // nếu file của bạn khác, sửa path
+import { supabase } from "../supabaseClient";
 import "../assets/css/character-list.css";
 import { useNavigate } from "react-router-dom";
 
@@ -15,8 +16,8 @@ interface ProductRow {
   image?: string;
 }
 
+// Fallback mock data
 const mock: ProductRow[] = [
-  // 3 sample (nếu supabase không sẵn, dùng mock)
   {
     id: 1,
     title: "Zhongli",
@@ -52,15 +53,24 @@ export default function CharacterList() {
   const cart = useCart();
   const navigate = useNavigate();
 
+  // Kiểm tra login, nếu chưa -> redirect
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  // Lấy dữ liệu sản phẩm
   useEffect(() => {
     const fetch = async () => {
       setLoading(true);
       try {
-        // try supabase first; if missing table -> fallback mock
         const { data, error } = await supabase
           .from("product1")
           .select("*")
           .order("id", { ascending: true });
+
         if (error || !data) {
           setList(mock);
         } else {
@@ -73,7 +83,7 @@ export default function CharacterList() {
           }));
           setList(mapped);
         }
-      } catch (e) {
+      } catch {
         setList(mock);
       } finally {
         setLoading(false);
@@ -93,10 +103,9 @@ export default function CharacterList() {
     setModalOpen(true);
   };
 
-  const handleAdd = (product: Omit<any, "qty">) => {
+  const handleAdd = (product: Omit<ProductRow, "qty">) => {
     cart.add(product);
     setModalOpen(false);
-    // optionally notify user
   };
 
   if (loading)
@@ -108,7 +117,11 @@ export default function CharacterList() {
       <div className="char-content">
         <SearchBar value={q} onChange={setQ} />
         <div
-          style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: 12,
+          }}
         >
           <button
             onClick={() => navigate("/cart")}
@@ -118,6 +131,7 @@ export default function CharacterList() {
               background: "#f0c040",
               border: "none",
               cursor: "pointer",
+              fontWeight: 600,
             }}
           >
             Đi tới giỏ hàng ({cart.items.length})
@@ -131,6 +145,7 @@ export default function CharacterList() {
               title={p.title}
               price={p.price}
               image={p.image}
+              description={p.description}
               onOpen={() => open(p)}
             />
           ))}

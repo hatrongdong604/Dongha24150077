@@ -25,7 +25,7 @@ export const CharacterCard: React.FC<Props> = ({
       style={{
         cursor: "pointer",
         borderRadius: 12,
-        padding: 12,
+        overflow: "hidden",
         background: "#1a1a1a",
         border: "1px solid rgba(255,255,255,0.06)",
         transition: "transform 0.15s, box-shadow 0.15s",
@@ -34,67 +34,78 @@ export const CharacterCard: React.FC<Props> = ({
         gap: 8,
       }}
     >
+      {/* Hình nhân vật */}
       {image && (
-        <img
-          src={image}
-          alt={title}
+        <div
           style={{
-            width: "100%",
             height: 180,
-            objectFit: "cover",
-            borderRadius: 8,
-          }}
-        />
-      )}
-
-      <h3
-        style={{
-          fontSize: "1.1rem",
-          fontWeight: 600,
-          color: "#f0c040",
-          margin: 0,
-          overflowWrap: "break-word",
-        }}
-      >
-        {title}
-      </h3>
-
-      {description && (
-        <p
-          style={{
-            fontSize: "0.85rem",
-            color: "#fff",
-            margin: 0,
-            overflowWrap: "break-word",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            background: "rgba(0,0,0,0.25)",
+            overflow: "hidden",
           }}
         >
-          {description}
-        </p>
+          <img
+            src={image}
+            alt={title}
+            style={{ maxHeight: "100%", width: "auto", objectFit: "contain" }}
+          />
+        </div>
       )}
 
+      {/* Thông tin */}
       <div
         style={{
+          padding: 12,
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          flexDirection: "column",
+          gap: 6,
         }}
       >
-        <strong style={{ color: "#f0c040" }}>
-          {price.toLocaleString()} VND
-        </strong>
-        <button
+        <h4 style={{ margin: 0, color: "#f0c040" }}>{title}</h4>
+        {description && (
+          <p
+            style={{
+              fontSize: 12,
+              color: "#ccc",
+              margin: 0,
+              height: 36,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {description}
+          </p>
+        )}
+
+        <div
           style={{
-            padding: "6px 10px",
-            borderRadius: 6,
-            background: "#f0c040",
-            border: "1px solid #f0c040",
-            fontWeight: 600,
-            cursor: "pointer",
-            transition: "all 0.2s",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          Thêm
-        </button>
+          <strong style={{ color: "#f0c040" }}>
+            {price.toLocaleString()} VND
+          </strong>
+          <button
+            style={{
+              padding: "6px 10px",
+              borderRadius: 6,
+              border: "none",
+              background: "#f0c040",
+              cursor: "pointer",
+              fontWeight: 600,
+            }}
+            onClick={(e) => {
+              e.stopPropagation(); // tránh click trùng div cha
+              onOpen();
+            }}
+          >
+            Chi tiết
+          </button>
+        </div>
       </div>
     </div>
   );
